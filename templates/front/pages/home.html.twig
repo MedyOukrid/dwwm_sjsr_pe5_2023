@@ -11,9 +11,9 @@
 
 {% block body %}
 
-    <h1 class="text-center">Instant-Faking</h1>
-
     {% include 'front/partial/_flashes.html.twig' %}
+
+    <h1 class="text-center">Instant-Faking</h1>
 
     <h2 class="mt-5 mb-4">{{ 'pages.home.title.trends'|trans }}</h2>
 
@@ -39,13 +39,9 @@
         {% endfor %}
     </div>
 
-    <div class="row">
+    <div class="row mt-5">
         {% for review in lastReviews %}
-            <div class="col-3">
-                <p>{{ review.game.name }}</p>
-                <p>{{ review.content }}</p>
-                <p>{{ review.user.name }}</p>
-            </div>
+            {% include 'front/partial/_review_card.html.twig' %}
         {% endfor %}
     </div>
 
