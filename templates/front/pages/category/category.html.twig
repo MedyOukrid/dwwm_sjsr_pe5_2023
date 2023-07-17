@@ -1,0 +1,17 @@
+{% extends 'front/base.html.twig' %}
+{% block title %}
+bonjour sale pro des  {{ category.name }}
+{% endblock %}
+{% block body %}
+<h1>{{ category.name }} </h1>
+<div class="row">
+	{% for game in games %}
+        {% include 'front/partial/_game_card.html.twig' with
+            {
+                'game': game,
+            }
+        %}
+
+    {% endfor %}
+    </div>
+{% endblock %}

@@ -55,9 +55,13 @@ class GameController extends AbstractController
             'relatedGames' => $relatedGames,
         ]);
     }
+    private function listByCategory(Category $category): Response
+    {
+        $games = $this->gameRepository->findByCategory($category);
 
-    private function listByCategory(Category $category): Response {
-        dd($category);
+        return $this->render('front/pages/category/category.html.twig', [
+            'category' => $category,
+            'games' => $games,
+        ]);
     }
-
 }

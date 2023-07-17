@@ -1,0 +1,7 @@
+{% block body %}
+
+{% for user in users  %}    
+<a href="{{ path('app_user', { 'name': users.name }) }}"><p>{{users.name}} </p></a>
+{% endfor %}
+
+{% endblock %}
