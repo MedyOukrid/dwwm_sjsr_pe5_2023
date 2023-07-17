@@ -114,4 +114,34 @@ class GameRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @param Category $category
+     * @return array
+     */
+    public function findByCategory(Category $category): array
+    {
+        return $this->createQueryBuilder('g')
+            ->join('g.categories', 'c')
+            ->where('c = :category')
+            ->setParameter('category', $category)
+            ->orderBy('g.publishedAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findMostPlayedGames(int $limit = 3): array {
+        return $this->createQueryBuilder('g')
+            ->join(
+                UserOwnGame::class,
+                'uog',
+                Join::WITH,
+                'uog.game = g'
+            )
+            ->groupBy('g.id')
+            ->orderBy('SUM(uog.gameTime)', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
 }

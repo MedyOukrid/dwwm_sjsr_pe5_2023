@@ -41,7 +41,7 @@ class GameController extends AbstractController
 
         $this->addFlash(
             'danger',
-            $this->translator->trans('pages.game.show.error')
+            $this->translator->trans('pages.error')
         );
         return $this->redirectToRoute('app_home');
     }
@@ -55,13 +55,11 @@ class GameController extends AbstractController
             'relatedGames' => $relatedGames,
         ]);
     }
-    private function listByCategory(Category $category): Response
-    {
-        $games = $this->gameRepository->findByCategory($category);
 
-        return $this->render('front/pages/category/category.html.twig', [
+    private function listByCategory(Category $category): Response {
+        return $this->render('front/pages/game/list_by_category.html.twig', [
+            'games' => $this->gameRepository->findByCategory($category),
             'category' => $category,
-            'games' => $games,
         ]);
     }
 }

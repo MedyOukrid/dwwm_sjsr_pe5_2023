@@ -7,9 +7,36 @@ pages:
       bestsellers: "Les meilleures ventes"
 
   error: "Cette page n'existe pas !"
+  game:
+    show:
+      categories: "Catégories"
+  country:
+    success_create: "Le pays a été créé avec succès !"
+    success_edit: "Le pays a été modifié avec succès !"
+    title:
+      edit: "Modifier un pays"
+      new: "Créer un pays"
+
+form:
+  country:
+    name:
+      label: "Nom"
+      placeholder: "France, Espagne..."
+    nationality:
+      label: "Nationalité"
+      placeholder: "Français, Espagnol..."
+    code:
+      label: "Code"
+      placeholder: "fr, es..."
 
 common:
   button:
     confirm: "Valider"
     cancel: "Annuler"
+
+footer:
+  most_sold:
+    title: "Catégories les plus vendues"
+  most_played:
+    title: "Jeux les plus jouées"
 
