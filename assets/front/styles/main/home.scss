@@ -1,5 +1,7 @@
 
-body {
-  background-color: $main-background-color;
-  color: $main-color;
+.searchbar-result {
+  position: absolute;
+  background: black;
+  width: 100%;
+  top: -4%;
 }

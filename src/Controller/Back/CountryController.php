@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Front;
+namespace App\Controller\Back;
 
 use App\Entity\Country;
 use App\Form\CountryType;
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 
-#[Route('/pays', name: 'app_country_')]
+#[Route('/admin/pays', name: 'app_admin_country_')]
 class CountryController extends AbstractController
 {
 
@@ -22,6 +22,13 @@ class CountryController extends AbstractController
         private TranslatorInterface $translator,
         private CountryRepository $countryRepository
     ) { }
+
+    #[Route('/', name: 'index')]
+    public function index(): Response {
+        return $this->render('back/pages/country/index.html.twig', [
+            'countries' => $this->countryRepository->findBy([], ['name' => 'ASC']),
+        ]);
+    }
 
     #[Route('/nouveau', name: 'new')]
     public function new(Request $request): Response {
@@ -37,7 +44,7 @@ class CountryController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        return $this->render('front/pages/country/new.html.twig', [
+        return $this->render('back/pages/country/new.html.twig', [
            'form' => $form->createView(),
             'title' => $this->translator->trans('pages.country.title.new'),
         ]);
@@ -64,12 +71,12 @@ class CountryController extends AbstractController
                 'success',
                 $this->translator->trans('pages.country.success_edit')
             );
-            return $this->redirectToRoute('app_country_edit', [
+            return $this->redirectToRoute('app_admin_country_edit', [
                 'slug' => $country->getSlug()
             ]);
         }
 
-        return $this->render('front/pages/country/new.html.twig', [
+        return $this->render('back/pages/country/new.html.twig', [
             'form' => $form->createView(),
             'title' => $this->translator->trans('pages.country.title.edit'),
         ]);

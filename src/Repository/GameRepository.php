@@ -3,12 +3,14 @@
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Entity\Country;
 use App\Entity\Game;
 use App\Entity\UserOwnGame;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -42,6 +44,15 @@ class GameRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function getQbAll(): QueryBuilder {
+        return $this->createQueryBuilder('g')
+            ->select('g', 'categ', 'r', 'c', 'u')
+            ->leftJoin('g.categories', 'categ')
+            ->leftJoin('g.reviews', 'r')
+            ->leftJoin('r.user', 'u')
+            ->leftJoin('g.countries', 'c');
     }
 
     public function findTendances(
@@ -93,14 +104,10 @@ class GameRepository extends ServiceEntityRepository
      * @throws NonUniqueResultException
      */
     public function findFullOneBy(string $slug): ?Game {
-        return $this->createQueryBuilder('g')
-            ->select('g', 'categ', 'r', 'c', 'u')
-            ->leftJoin('g.categories', 'categ')
-            ->leftJoin('g.reviews', 'r')
-            ->leftJoin('r.user', 'u')
-            ->leftJoin('g.countries', 'c')
+        return $this->getQbAll()
             ->where('g.slug = :slug')
             ->setParameter('slug', $slug)
+            ->orderBy('r.createdAt', 'DESC')
             ->getQuery()
             ->getOneOrNullResult();
     }
@@ -170,6 +177,44 @@ class GameRepository extends ServiceEntityRepository
             ->groupBy('g.id')
             ->orderBy('SUM(uog.gameTime)', 'DESC')
             ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByCountry(Country $country): array
+    {
+        return $this->createQueryBuilder('g')
+            ->join('g.countries', 'c')
+            ->where('c = :country')
+            ->setParameter('country', $country)
+            ->orderBy('g.publishedAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findLastBoughtGames(int $limit = 4): array
+    {
+        return $this->createQueryBuilder('g')
+            ->join(
+                UserOwnGame::class,
+                'uog',
+                Join::WITH,
+                'uog.game = g'
+            )
+            ->orderBy('uog.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByApproxSearch(string $searched): array
+    {
+        return $this->createQueryBuilder('g')
+            ->where('g.name LIKE :searched')
+            ->setParameter('searched', '%'.$searched.'%')
+            ->orderBy('g.name', 'ASC')
             ->getQuery()
             ->getResult();
     }

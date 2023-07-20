@@ -1,26 +1,91 @@
 {% extends 'front/base.html.twig' %}
 
+{% block title %}
+    Profil de {{ user.name }}
+{% endblock %}
+
 {% block body %}
 
+    {% include 'front/partial/_flashes.html.twig' %}
+
     <h1 class="mt-5">
-        Profil de {{ user.name }}
+        Profil de {{ user.name }} <img alt="{{ user.country.nationality }}" src="{{ user.country.urlFlag }}">
+        <button class="btn btn-warning collapse multi-collapse show float-end"
+                data-bs-toggle="collapse"
+                data-bs-target=".multi-collapse"
+                aria-expanded="false"
+                aria-controls="button-edit form-profile"
+                id="button-edit"
+        >
+            <i class="fa fa-pen"></i>
+        </button>
     </h1>
 
     <p>Temps de jeu total : {{ getUserTimeConverter(user) }}</p>
 
-    <h1 class="mt-5">Ses jeux</h1>
-    <div class="row">
-        {% for uog in user.userOwnGames %}
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <p class="m-0 text-center">{{ uog.gameTime|time_converter }}</p>
-                {% include 'front/partial/_game_card.html.twig' with
-                    {
-                        'game': uog.game,
-                        'containerClass': 'col-lg-12'
-                    }
-                %}
+    <div class="collapse multi-collapse" id="form-profile">
+        <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+            {{ form_start(form) }}
+            <div class="mt-4">
+                {{ form_row(form.nickname) }}
             </div>
-        {% endfor %}
+            <div class="my-4">
+                {{ form_row(form.password) }}
+            </div>
+            <div>
+                {{ form_row(form.country) }}
+            </div>
+            <div class="mt-4">
+                <button class="btn btn-success" type="submit">
+                    <i class="fa fa-check"></i>
+                    {{ 'common.button.confirm'|trans }}
+                </button>
+                <button class="btn btn-danger"
+                        data-bs-toggle="collapse"
+                        data-bs-target=".multi-collapse"
+                        aria-expanded="false"
+                        aria-controls="form-profile"
+                        id="button-cancel"
+                        type="button"
+                >
+                    <i class="fa fa-xmark"></i>
+                    {{ 'common.button.cancel'|trans }}
+                </button>
+            </div>
+            {{ form_end(form) }}
+        </div>
     </div>
+
+    {% if user.userOwnGames|length > 0 %}
+        <h1 class="mt-5">Ses jeux</h1>
+        <div class="row">
+            {% for uog in user.userOwnGames %}
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <p class="m-0 text-center">{{ uog.gameTime|time_converter }}</p>
+                    {% include 'front/partial/_game_card.html.twig' with
+                        {
+                            'game': uog.game,
+                            'containerClass': 'col-lg-12'
+                        }
+                    %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if user.reviews|length > 0 %}
+        <div class="mt-5">
+            <h2>Ses commentaires</h2>
+            <div class="row">
+                {% for review in user.reviews %}
+                    {% include 'front/partial/_review_card.html.twig' with
+                        {
+                            'fromUserShow': true
+                        }
+                    %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
 
 {% endblock %}
