@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'put',
     ],
 )]
-class Category
+class Category implements SlugInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,7 +28,6 @@ class Category
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\NotBlank(message: 'L\'image doit être renseigné')]
     private ?string $image = null;
 
     #[ORM\Column(length: 255)]
@@ -76,7 +75,7 @@ class Category
         return $this->slug;
     }
 
-    public function setSlug(string $slug): static
+    public function setSlug(string $slug): self
     {
         $this->slug = $slug;
 
