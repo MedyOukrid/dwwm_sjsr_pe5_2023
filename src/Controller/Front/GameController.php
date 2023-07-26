@@ -95,6 +95,6 @@ class GameController extends AbstractController
         return $this->render('front/pages/game/list_by_category.html.twig', [
             'games' => $this->gameRepository->findByCategory($category),
             'category' => $category,
-        ]);
+        ]);booliste 
     }
 }

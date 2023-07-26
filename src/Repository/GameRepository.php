@@ -108,15 +108,15 @@ class GameRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-    public function findByCategory(Category $category): array {
-        return $this->createQueryBuilder('game')
-            ->join('game.categories', 'categories')
-            ->where('categories = :categ')
-            ->setParameter('categ', $category)
-            ->orderBy('game.publishedAt','asc')
-            ->getQuery()
-            ->getArrayResult();
-    }
+    // public function findByCategory(Category $category): array {
+    //     return $this->createQueryBuilder('game')
+    //         ->join('game.categories', 'categories')
+    //         ->where('categories = :categ')
+    //         ->setParameter('categ', $category)
+    //         ->orderBy('game.publishedAt','asc')
+    //         ->getQuery()
+    //         ->getArrayResult();
+    // }
 
     /**
      * @param Category $category
@@ -133,35 +133,35 @@ class GameRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findMostPlayedGames(int $limit = 3): array {
-        return $this->createQueryBuilder('g')
-            ->join(
-                UserOwnGame::class,
-                'uog',
-                Join::WITH,
-                'uog.game = g'
-            )
-            ->groupBy('g.id')
-            ->orderBy('SUM(uog.gameTime)', 'DESC')
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
-    }
+    // public function findMostPlayedGames(int $limit = 3): array {
+    //     return $this->createQueryBuilder('g')
+    //         ->join(
+    //             UserOwnGame::class,
+    //             'uog',
+    //             Join::WITH,
+    //             'uog.game = g'
+    //         )
+    //         ->groupBy('g.id')
+    //         ->orderBy('SUM(uog.gameTime)', 'DESC')
+    //         ->setMaxResults($limit)
+    //         ->getQuery()
+    //         ->getResult();
+    // }
 
     /**
      * @param Category $category
      * @return array
      */
-    public function findByCategory(Category $category): array
-    {
-        return $this->createQueryBuilder('g')
-            ->join('g.categories', 'c')
-            ->where('c = :category')
-            ->setParameter('category', $category)
-            ->orderBy('g.publishedAt', 'DESC')
-            ->getQuery()
-            ->getResult();
-    }
+    // public function findByCategory(Category $category): array
+    // {
+    //     return $this->createQueryBuilder('g')
+    //         ->join('g.categories', 'c')
+    //         ->where('c = :category')
+    //         ->setParameter('category', $category)
+    //         ->orderBy('g.publishedAt', 'DESC')
+    //         ->getQuery()
+    //         ->getResult();
+    // }
 
     public function findMostPlayedGames(int $limit = 3): array {
         return $this->createQueryBuilder('g')

@@ -24,12 +24,27 @@
             </div>
 
             <div class="col-lg-4 col-md-2 col-sm-2 my-auto">
+                {% if app.user %}
+                    <a class="main-link" href="{{ path('app_logout') }}">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Déconnexion
+                    </a>
+                {% else %}
+                    <a class="main-link" href="{{ path('app_login') }}">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Connexion
+                    </a>
+                {% endif %}
                 <a class="main-link" href="{{ path('app_profile_register') }}">
                     Inscription
                 </a>
-                <a class="main-link" href="{{ path('app_admin_index') }}">
-                    Admin
-                </a>
+                {% if app.user %}
+                    {% if app.user.admin %}
+                        <a class="main-link" href="{{ path('app_admin_index') }}">
+                            Admin
+                        </a>
+                    {% endif %}
+                {% endif %}
             </div>
         </div>
     </div>
